@@ -40,7 +40,6 @@ CREATE TABLE IF NOT EXISTS content.genre_film_work (
         FOREIGN KEY (film_work_id)
         REFERENCES content.film_work (id)
         ON DELETE CASCADE
-        ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS content.person_film_work (
@@ -58,7 +57,6 @@ CREATE TABLE IF NOT EXISTS content.person_film_work (
         FOREIGN KEY (film_work_id)
         REFERENCES content.film_work (id)
         ON DELETE CASCADE
-        ON UPDATE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS film_work_id_film_work_creation_date_idx ON content.film_work (id, creation_date);
