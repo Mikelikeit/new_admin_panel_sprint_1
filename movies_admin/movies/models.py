@@ -30,6 +30,12 @@ class Genre(UUIDMixin, TimeStampedMixin):
         db_table = "content\".\"genre"
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
+        indexes = [
+            models.Index(
+                fields=['id', 'name'],
+                name='genre_id_genre_name_idx',
+            ),
+        ]
 
 
 class Person(UUIDMixin, TimeStampedMixin):
@@ -42,6 +48,12 @@ class Person(UUIDMixin, TimeStampedMixin):
         db_table = "content\".\"person"
         verbose_name = 'Персона'
         verbose_name_plural = 'Персоны'
+        indexes = [
+            models.Index(
+                fields=['id', 'full_name'],
+                name='person_id_person_full_name_idx',
+            ),
+        ]
 
 
 class FilmWork(UUIDMixin, TimeStampedMixin):
@@ -67,22 +79,38 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
         db_table = "content\".\"film_work"
         verbose_name = 'Кинопроизведение'
         verbose_name_plural = 'Кинопроизведения'
+        indexes = [
+            models.Index(
+                fields=['id', 'creation_date'],
+                name='film_work_id_creation_date_idx',
+            ),
+        ]
 
 
 class GenreFilmWork(UUIDMixin):
     film_work = models.ForeignKey('FilmWork', on_delete=models.CASCADE)
-    genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
+    genre = models.ForeignKey('Genre', on_delete=models.CASCADE, verbose_name=_('genre'))
 
 
     class Meta:
         db_table = "content\".\"genre_film_work"
         verbose_name = 'Жанр Кинопроизведения'
         verbose_name_plural = 'Жанры Кинопроизведений'
+        indexes = [
+            models.Index(
+                fields=['id', 'genre_id'],
+                name='gfw_id_genre_id_idx',
+            ),
+            models.Index(
+                fields=['id', 'film_work_id'],
+                name='gfw_id_film_work_id_idx',
+            ),
+        ]
 
 
 class PersonFilmWork(UUIDMixin):
     film_work = models.ForeignKey('FilmWork', on_delete=models.CASCADE)
-    person = models.ForeignKey('Person', on_delete=models.CASCADE)
+    person = models.ForeignKey('Person', on_delete=models.CASCADE, verbose_name=_('person'))
     role = models.CharField(_('role'), max_length=255)
 
 
@@ -90,3 +118,13 @@ class PersonFilmWork(UUIDMixin):
         db_table = "content\".\"person_film_work"
         verbose_name = 'Персона Кинопроизведения'
         verbose_name_plural = 'Персоны Кинопроизведений'
+        indexes = [
+            models.Index(
+                fields=['id', 'person_id'],
+                name='pfw_id_person_id_idx',
+            ),
+            models.Index(
+                fields=['id', 'film_work_id'],
+                name='pfw_id_film_work_id_idx',
+            ),
+        ]
