@@ -18,6 +18,8 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+LOCALE_PATHS = ['movies/locale']
+
 include('components/security.py', 'components/application.py', 'components/password_validation.py',
         'components/database.py', 'components/internationalization.py', 'components/static.py',
         'components/default_pk_field_type.py')

@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils.translation import gettext_lazy as _
 
 
 class TimeStampedMixin(models.Model):
@@ -19,8 +20,8 @@ class UUIDMixin(models.Model):
 
 
 class Genre(UUIDMixin, TimeStampedMixin):
-    name = models.CharField('name', max_length=255, unique=True)
-    description = models.TextField('description', blank=True)
+    name = models.CharField(_('name'), max_length=255, unique=True)
+    description = models.TextField(_('description'), blank=True)
 
     def __str__(self):
         return self.name
@@ -32,7 +33,7 @@ class Genre(UUIDMixin, TimeStampedMixin):
 
 
 class Person(UUIDMixin, TimeStampedMixin):
-    full_name = models.CharField('full_name', max_length=255, unique=True)
+    full_name = models.CharField(_('full_name'), max_length=255, unique=True)
 
     def __str__(self):
         return self.full_name
@@ -44,17 +45,17 @@ class Person(UUIDMixin, TimeStampedMixin):
 
 
 class FilmWork(UUIDMixin, TimeStampedMixin):
-    title = models.CharField('title', max_length=255)
-    description = models.TextField('description', blank=True)
-    creation_date = models.DateField('creation_date')
-    rating = models.FloatField('rating', default=0.0, validators=[MinValueValidator(0.0),
-                                                                  MaxValueValidator(100.0)])
+    title = models.CharField(_('title'), max_length=255)
+    description = models.TextField(_('description'), blank=True)
+    creation_date = models.DateField(_('creation_date'))
+    rating = models.FloatField(_('rating'), default=0.0, validators=[MinValueValidator(0.0),
+                                                                     MaxValueValidator(100.0)])
 
     class Type(models.TextChoices):
-        movie = 'movie'
-        tv_show = 'tv_show'
+        movie = 'movie', _('movie')
+        tv_show = 'tv_show', _('tv_show')
 
-    type = models.CharField('type', max_length=255,
+    type = models.CharField(_('type'), max_length=255,
                             choices=Type.choices, default=Type.movie)
     genres = models.ManyToManyField(Genre, through='GenreFilmWork')
     persons = models.ManyToManyField(Person, through='PersonFilmWork')
@@ -72,14 +73,20 @@ class GenreFilmWork(UUIDMixin):
     film_work = models.ForeignKey('FilmWork', on_delete=models.CASCADE)
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
 
+
     class Meta:
         db_table = "content\".\"genre_film_work"
+        verbose_name = 'Жанр Кинопроизведения'
+        verbose_name_plural = 'Жанры Кинопроизведений'
 
 
 class PersonFilmWork(UUIDMixin):
     film_work = models.ForeignKey('FilmWork', on_delete=models.CASCADE)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
-    role = models.CharField('role', max_length=255)
+    role = models.CharField(_('role'), max_length=255)
+
 
     class Meta:
         db_table = "content\".\"person_film_work"
+        verbose_name = 'Персона Кинопроизведения'
+        verbose_name_plural = 'Персоны Кинопроизведений'
