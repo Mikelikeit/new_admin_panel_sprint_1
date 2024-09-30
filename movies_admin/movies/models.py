@@ -60,8 +60,9 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
     title = models.CharField(_('title'), max_length=255)
     description = models.TextField(_('description'), blank=True)
     creation_date = models.DateField(_('creation_date'))
-    rating = models.FloatField(_('rating'), default=0.0, validators=[MinValueValidator(0.0),
-                                                                     MaxValueValidator(100.0)])
+    rating = models.FloatField(_('rating'), default=0.0,
+                               validators=[MinValueValidator(0.0),
+                                           MaxValueValidator(100.0)])
 
     class Type(models.TextChoices):
         movie = 'movie', _('movie')
@@ -89,8 +90,8 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
 
 class GenreFilmWork(UUIDMixin):
     film_work = models.ForeignKey('FilmWork', on_delete=models.CASCADE)
-    genre = models.ForeignKey('Genre', on_delete=models.CASCADE, verbose_name=_('genre'))
-
+    genre = models.ForeignKey('Genre', on_delete=models.CASCADE,
+                              verbose_name=_('genre'))
 
     class Meta:
         db_table = "content\".\"genre_film_work"
@@ -110,9 +111,9 @@ class GenreFilmWork(UUIDMixin):
 
 class PersonFilmWork(UUIDMixin):
     film_work = models.ForeignKey('FilmWork', on_delete=models.CASCADE)
-    person = models.ForeignKey('Person', on_delete=models.CASCADE, verbose_name=_('person'))
+    person = models.ForeignKey('Person', on_delete=models.CASCADE,
+                               verbose_name=_('person'))
     role = models.CharField(_('role'), max_length=255)
-
 
     class Meta:
         db_table = "content\".\"person_film_work"
