@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import logging
 from contextlib import closing
 from dataclasses import dataclass, astuple, asdict, fields
 from datetime import datetime
@@ -172,7 +173,11 @@ def load_data(sqlite_cursor: sqlite3.Cursor, pg_cursor: ClientCursor, table_name
         )
         query_insert_to_pg = (f'INSERT INTO content.{table_name} ({column_names_str}) '
                               f'VALUES {bind_values} ON CONFLICT (id) DO NOTHING;')
-        pg_cursor.execute(query_insert_to_pg)
+        try:
+            pg_cursor.execute(query_insert_to_pg)
+        except Exception as err:
+            logging.error(f'Получено исключение :: {err}')
+            raise ValueError(f'Есть ошибки при записи в postgres')
 
 
 def get_all_table_names_sqlite(cursor: sqlite3.Cursor) -> list[str]:
@@ -191,6 +196,7 @@ if __name__ == '__main__':
         with closing(sqlite_conn.cursor()) as sqlite_cur, closing(pg_conn.cursor(row_factory=dict_row)) as pg_cur:
             table_names_sqlite = get_all_table_names_sqlite(sqlite_cur)
             if not table_names_sqlite:
+                logging.error('В SQLite не было найдено ни одной таблицы для миграции')
                 raise ValueError('В SQLite не было найдено ни одной таблицы для миграции')
             for tbl_name in table_names_sqlite:
                 load_data(sqlite_cur, pg_cur, tbl_name)
