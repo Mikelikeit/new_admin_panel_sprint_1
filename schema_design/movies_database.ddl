@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS content.film_work (
     id UUID PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT,
-    creation_date DATE NOT NULL,
+    creation_date DATE,
     rating FLOAT NOT NULL DEFAULT 0.0,
     type VARCHAR(255) NOT NULL,
     created TIMESTAMP WITH TIME ZONE,
@@ -59,12 +59,12 @@ CREATE TABLE IF NOT EXISTS content.person_film_work (
 
 CREATE INDEX IF NOT EXISTS film_work_id_film_work_creation_date_idx ON content.film_work (id, creation_date);
 
-CREATE UNIQUE INDEX IF NOT EXISTS genre_id_genre_name_idx ON content.genre (id, name);
+CREATE INDEX IF NOT EXISTS genre_id_genre_name_idx ON content.genre (id, name);
 
-CREATE UNIQUE INDEX IF NOT EXISTS person_id_person_full_name_idx ON content.person (id, full_name);
+CREATE INDEX IF NOT EXISTS person_id_person_full_name_idx ON content.person (id, full_name);
 
-CREATE UNIQUE INDEX IF NOT EXISTS gfw_id_genre_id_idx ON content.genre_film_work (id, genre_id);
-CREATE UNIQUE INDEX IF NOT EXISTS gfw_id_film_work_id_idx ON content.genre_film_work (id, film_work_id);
+CREATE INDEX IF NOT EXISTS gfw_id_genre_id_idx ON content.genre_film_work (id, genre_id);
+CREATE INDEX IF NOT EXISTS gfw_id_film_work_id_idx ON content.genre_film_work (id, film_work_id);
 
-CREATE UNIQUE INDEX IF NOT EXISTS pfw_id_person_id_idx ON content.person_film_work (id, person_id);
-CREATE UNIQUE INDEX IF NOT EXISTS pfw_id_film_work_id_idx ON content.person_film_work (id, film_work_id);
+CREATE INDEX IF NOT EXISTS pfw_id_person_id_idx ON content.person_film_work (id, person_id);
+CREATE INDEX IF NOT EXISTS pfw_id_film_work_id_idx ON content.person_film_work (id, film_work_id);

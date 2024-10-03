@@ -21,7 +21,7 @@ class UUIDMixin(models.Model):
 
 class Genre(UUIDMixin, TimeStampedMixin):
     name = models.CharField(_('name'), max_length=255, unique=True)
-    description = models.TextField(_('description'), blank=True)
+    description = models.TextField(_('description'), blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -58,11 +58,11 @@ class Person(UUIDMixin, TimeStampedMixin):
 
 class FilmWork(UUIDMixin, TimeStampedMixin):
     title = models.CharField(_('title'), max_length=255)
-    description = models.TextField(_('description'), blank=True)
-    creation_date = models.DateField(_('creation_date'))
-    rating = models.FloatField(_('rating'), default=0.0,
+    description = models.TextField(_('description'), blank=True, null=True)
+    creation_date = models.DateField(_('creation_date'), blank=True, null=True)
+    rating = models.FloatField(_('rating'),
                                validators=[MinValueValidator(0.0),
-                                           MaxValueValidator(100.0)])
+                                           MaxValueValidator(100.0)], null=True)
 
     class Type(models.TextChoices):
         movie = 'movie', _('movie')
@@ -92,6 +92,7 @@ class GenreFilmWork(UUIDMixin):
     film_work = models.ForeignKey('FilmWork', on_delete=models.CASCADE)
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE,
                               verbose_name=_('genre'))
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "content\".\"genre_film_work"
@@ -114,6 +115,7 @@ class PersonFilmWork(UUIDMixin):
     person = models.ForeignKey('Person', on_delete=models.CASCADE,
                                verbose_name=_('person'))
     role = models.CharField(_('role'), max_length=255)
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "content\".\"person_film_work"
