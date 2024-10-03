@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS content.film_work (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     creation_date DATE,
-    rating FLOAT NOT NULL DEFAULT 0.0,
+    rating FLOAT,
     type VARCHAR(255) NOT NULL,
     created TIMESTAMP WITH TIME ZONE,
     modified TIMESTAMP WITH TIME ZONE
