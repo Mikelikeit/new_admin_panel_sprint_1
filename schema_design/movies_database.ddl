@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS content.person_film_work (
     film_work_id UUID NOT NULL,
     role VARCHAR(255) NOT NULL,
     created TIMESTAMP WITH TIME ZONE,
-       CONSTRAINT fk_person_id
+    CONSTRAINT fk_person_id
         FOREIGN KEY (person_id)
         REFERENCES content.person (id)
         ON DELETE CASCADE,
